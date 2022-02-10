@@ -248,11 +248,9 @@ export interface CF2GetAddonResponse {
 }
 
 export interface CF2FeaturedModsResponse {
-  data: {
-    featured: CF2Addon[];
-    popular: CF2Addon[];
-    recentlyUpdated: CF2Addon[];
-  };
+  featured: CF2Addon[];
+  popular: CF2Addon[];
+  recentlyUpdated: CF2Addon[];
 }
 
 export interface CF2GetFeaturedModsResponse {
@@ -287,5 +285,5 @@ export interface CF2GetModFileResponse {
 export interface CF2GetFeaturedModsRequest {
   gameId: number;
   excludedModIds: number[];
-  gameVersionTypeId?: number;
+  gameVersionTypeId?: CF2WowGameVersionType;
 }
