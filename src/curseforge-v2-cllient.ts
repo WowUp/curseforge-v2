@@ -29,7 +29,7 @@ export class CFV2Client {
     this._headers = config.headers;
   }
 
-  //MODS
+  // MODS
 
   // https://docs.curseforge.com/#get-mod-description
   public async getModDescrption(modId: number): Promise<HttpResult<cfv2.CF2GetModDescriptionResponse>> {
@@ -94,7 +94,7 @@ export class CFV2Client {
   public async searchMods(params: cfv2.CF2SearchModsParams): Promise<HttpResult<cfv2.CF2SearchModsResponse>> {
     const queryMap: Record<string, string> = {};
 
-    for (let [key, value] of Object.entries(params)) {
+    for (const [key, value] of Object.entries(params)) {
       if ((typeof value !== 'string' && isNaN(value)) || value === null || value === undefined) {
         continue;
       }

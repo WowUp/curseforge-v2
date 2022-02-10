@@ -7,9 +7,9 @@ export enum CF2GameType {
 }
 
 export enum CF2WowGameVersionType {
-  BurningCrusade = 73246, //WoW Burning Crusade Classic
-  Classic = 67408, //WoW Classic
-  Retail = 517, //WoW
+  BurningCrusade = 73246, // WoW Burning Crusade Classic
+  Classic = 67408, // WoW Classic
+  Retail = 517, // WoW
 }
 
 export enum CF2ModStatus {
