@@ -1,5 +1,5 @@
 {
-  "name": "cf-api",
+  "name": "curseforge-v2",
   "version": "1.0.0",
   "description": "CurseForge V2 API Library",
   "main": "lib/index.js",
