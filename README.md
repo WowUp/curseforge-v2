@@ -21,7 +21,7 @@ Getting featured addons
 
 ```javascript
 async function getFeaturedMods() {
-  const client = new CFV2Client({ apiKey: _apiKey });
+  const client = new CFV2Client({ apiKey: 'YOUR_API_KEY' });
 
   const result = await client.getFeaturedMods({
     gameId: 1,
