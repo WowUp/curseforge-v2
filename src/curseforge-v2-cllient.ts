@@ -2,6 +2,8 @@ import axios, { AxiosRequestConfig, Method } from 'axios';
 
 import * as cfv2 from './curseforge-api-v2';
 
+const DEFAULT_HTTP_TIMEOUT_MS = 30000;
+
 export interface HttpResult<T> {
   statusCode: number;
   data?: T;
@@ -12,12 +14,14 @@ export interface CFV2ClientConfig {
   apiKey: string;
   headers?: { [key: string]: string };
   apiUrl?: string;
+  httpTimeoutMs?: number;
 }
 
 export class CFV2Client {
   private _apiKey: string;
   private _apiUrl: string;
   private _headers?: { [key: string]: string };
+  private _httpTimeoutMs: number;
 
   constructor(config: CFV2ClientConfig) {
     if (typeof config.apiKey !== 'string' || config.apiKey.length === 0) {
@@ -27,6 +31,10 @@ export class CFV2Client {
     this._apiKey = config.apiKey;
     this._apiUrl = typeof config.apiUrl === 'string' && config.apiUrl.length > 0 ? config.apiUrl : cfv2.BaseUrl;
     this._headers = config.headers;
+    this._httpTimeoutMs =
+      typeof config.httpTimeoutMs === 'number' && !isNaN(config.httpTimeoutMs)
+        ? config.httpTimeoutMs
+        : DEFAULT_HTTP_TIMEOUT_MS;
   }
 
   // MODS
@@ -37,6 +45,7 @@ export class CFV2Client {
 
     return await httpGet<cfv2.CF2GetModDescriptionResponse>(url, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
@@ -49,6 +58,7 @@ export class CFV2Client {
 
     return await httpGet<cfv2.CF2GetModFileChangelogResponse>(url, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
@@ -58,6 +68,7 @@ export class CFV2Client {
 
     return await httpGet<cfv2.CF2GetAddonResponse>(url, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
@@ -67,6 +78,7 @@ export class CFV2Client {
 
     return await httpPost<cfv2.CF2GetModsResponse>(url, req, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
@@ -76,6 +88,7 @@ export class CFV2Client {
 
     return await httpGet<cfv2.CF2GetModFileResponse>(url, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
@@ -87,6 +100,7 @@ export class CFV2Client {
 
     return await httpPost<cfv2.CF2GetFeaturedModsResponse>(url, req, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
@@ -107,6 +121,7 @@ export class CFV2Client {
 
     return await httpGet<cfv2.CF2SearchModsResponse>(url, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
@@ -121,6 +136,7 @@ export class CFV2Client {
 
     return await httpPost<cfv2.CF2GetFingerprintMatchesResponse>(url, req, {
       headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
     });
   }
 
