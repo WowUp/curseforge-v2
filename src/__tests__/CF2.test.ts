@@ -32,7 +32,7 @@ test('Client Overrides Success', async () => {
       'User-Agent': ua,
     },
   });
-  const result = await client.getModDescrption(558086);
+  const result = await client.getModDescription(558086);
 
   expect(result.statusCode).toEqual(200);
   expect(result.data).toBeTruthy();
@@ -43,9 +43,101 @@ test('Client Overrides Success', async () => {
 
 // Test API Calls
 
+// GAMES
+test('Client Get Games Success', async () => {
+  const client = simpleClient();
+  const result = await client.getGames();
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(Array.isArray(result.data?.data)).toBeTruthy();
+  expect(result.data?.data.length).toBeGreaterThan(1);
+});
+
+test('Client Get Games Success Paginated', async () => {
+  const client = simpleClient();
+  const result = await client.getGames(1, 1);
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(Array.isArray(result.data?.data)).toBeTruthy();
+  expect(result.data?.data.length).toEqual(1);
+});
+
+test('Client Get Games Success Empty', async () => {
+  const client = simpleClient();
+  const result = await client.getGames(1000, 1);
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(Array.isArray(result.data?.data)).toBeTruthy();
+  expect(result.data?.data.length).toEqual(0);
+});
+
+test('Client Get Game Success', async () => {
+  const gameId = 1;
+  const client = simpleClient();
+  const result = await client.getGame(gameId);
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(result.data?.data).toBeTruthy();
+  expect(result.data?.data.id).toEqual(gameId);
+});
+
+test('Client Get Game Failure', async () => {
+  const gameId = 1000;
+  const client = simpleClient();
+  const result = await client.getGame(gameId);
+
+  expect(result.statusCode).toEqual(404);
+  expect(result.data).toBeFalsy();
+});
+
+test('Client Get Game Versions Success', async () => {
+  const gameId = 1;
+  const client = simpleClient();
+  const result = await client.getGameVersions(gameId);
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(Array.isArray(result.data?.data)).toBeTruthy();
+  expect(result.data?.data.length).toBeGreaterThan(1);
+});
+
+test('Client Get Game Versions Success', async () => {
+  const gameId = 1000;
+  const client = simpleClient();
+  const result = await client.getGameVersions(gameId);
+
+  expect(result.statusCode).toEqual(404);
+  expect(result.data).toBeFalsy();
+});
+
+test('Client Get Game Version Types Success', async () => {
+  const gameId = 1;
+  const client = simpleClient();
+  const result = await client.getGameVersionTypes(gameId);
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(Array.isArray(result.data?.data)).toBeTruthy();
+  expect(result.data?.data.length).toBeGreaterThan(1);
+});
+
+test('Client Get Game Version Types Success', async () => {
+  const gameId = 1000;
+  const client = simpleClient();
+  const result = await client.getGameVersionTypes(gameId);
+
+  expect(result.statusCode).toEqual(404);
+  expect(result.data).toBeFalsy();
+});
+
+// MODS
 test('Client Get Mod Descrption Success', async () => {
   const client = simpleClient();
-  const result = await client.getModDescrption(558086);
+  const result = await client.getModDescription(558086);
 
   expect(result.statusCode).toEqual(200);
   expect(result.data).toBeTruthy();
@@ -54,7 +146,7 @@ test('Client Get Mod Descrption Success', async () => {
 
 test('Client Get Mod Descrption Failure', async () => {
   const client = simpleClient();
-  const result = await client.getModDescrption(558086123);
+  const result = await client.getModDescription(558086123);
 
   expect(result.statusCode).toEqual(404);
   expect(result.message).toBeTruthy();

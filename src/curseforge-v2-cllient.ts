@@ -37,16 +37,48 @@ export class CFV2Client {
         : DEFAULT_HTTP_TIMEOUT_MS;
   }
 
+  // GAMES
+
+  // https://docs.curseforge.com/#get-games
+  public async getGames(index?: number, pageSize?: number): Promise<HttpResult<cfv2.CF2GetModDescriptionResponse>> {
+    const queryParams = new URLSearchParams();
+    if (typeof index === 'number' && !isNaN(index)) {
+      queryParams.append('index', index.toString());
+    }
+
+    if (typeof pageSize === 'number' && !isNaN(pageSize)) {
+      queryParams.append('pageSize', pageSize.toString());
+    }
+
+    const url = new URL(`${this._apiUrl}/v1/games?${queryParams.toString()}`);
+
+    return await this.cfGet<cfv2.CF2GetModDescriptionResponse>(url);
+  }
+
+  // https://docs.curseforge.com/#get-game
+  public async getGame(gameId: number): Promise<HttpResult<cfv2.CF2GetGameResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/games/${gameId}`);
+    return await this.cfGet<cfv2.CF2GetGameResponse>(url);
+  }
+
+  // https://docs.curseforge.com/#get-versions
+  public async getGameVersions(gameId: number): Promise<HttpResult<cfv2.CF2GetVersionsResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/games/${gameId}/versions`);
+    return await this.cfGet<cfv2.CF2GetVersionsResponse>(url);
+  }
+
+  // https://docs.curseforge.com/#get-version-types
+  public async getGameVersionTypes(gameId: number): Promise<HttpResult<cfv2.CF2GetVersionTypesResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/games/${gameId}/version-types`);
+    return await this.cfGet<cfv2.CF2GetVersionTypesResponse>(url);
+  }
+
   // MODS
 
   // https://docs.curseforge.com/#get-mod-description
-  public async getModDescrption(modId: number): Promise<HttpResult<cfv2.CF2GetModDescriptionResponse>> {
+  public async getModDescription(modId: number): Promise<HttpResult<cfv2.CF2GetModDescriptionResponse>> {
     const url = new URL(`${this._apiUrl}/v1/mods/${modId}/description`);
-
-    return await httpGet<cfv2.CF2GetModDescriptionResponse>(url, {
-      headers: this.getAuthHeaders(),
-      timeout: this._httpTimeoutMs,
-    });
+    return await this.cfGet<cfv2.CF2GetModDescriptionResponse>(url);
   }
 
   // https://docs.curseforge.com/#get-mod-file-changelog
@@ -56,40 +88,27 @@ export class CFV2Client {
   ): Promise<HttpResult<cfv2.CF2GetModFileChangelogResponse>> {
     const url = new URL(`${this._apiUrl}/v1/mods/${modId}/files/${fileId}/changelog`);
 
-    return await httpGet<cfv2.CF2GetModFileChangelogResponse>(url, {
-      headers: this.getAuthHeaders(),
-      timeout: this._httpTimeoutMs,
-    });
+    return await this.cfGet<cfv2.CF2GetModFileChangelogResponse>(url);
   }
 
   // https://docs.curseforge.com/#get-mod
   public async getMod(modId: number): Promise<HttpResult<cfv2.CF2GetAddonResponse>> {
     const url = new URL(`${this._apiUrl}/v1/mods/${modId}`);
 
-    return await httpGet<cfv2.CF2GetAddonResponse>(url, {
-      headers: this.getAuthHeaders(),
-      timeout: this._httpTimeoutMs,
-    });
+    return await this.cfGet<cfv2.CF2GetAddonResponse>(url);
   }
 
   // https://docs.curseforge.com/#get-mods
   public async getMods(req: cfv2.CF2GetModsRequest): Promise<HttpResult<cfv2.CF2GetModsResponse>> {
     const url = new URL(`${this._apiUrl}/v1/mods`);
 
-    return await httpPost<cfv2.CF2GetModsResponse>(url, req, {
-      headers: this.getAuthHeaders(),
-      timeout: this._httpTimeoutMs,
-    });
+    return await this.cfPost<cfv2.CF2GetModsResponse>(url, req);
   }
 
   // https://docs.curseforge.com/#get-mod-file
   public async getModFile(modId: number, fileId: number): Promise<HttpResult<cfv2.CF2GetModFileResponse>> {
     const url = new URL(`${this._apiUrl}/v1/mods/${modId}/files/${fileId}`);
-
-    return await httpGet<cfv2.CF2GetModFileResponse>(url, {
-      headers: this.getAuthHeaders(),
-      timeout: this._httpTimeoutMs,
-    });
+    return await this.cfGet<cfv2.CF2GetModFileResponse>(url);
   }
 
   // https://docs.curseforge.com/#get-featured-mods
@@ -98,10 +117,7 @@ export class CFV2Client {
   ): Promise<HttpResult<cfv2.CF2GetFeaturedModsResponse>> {
     const url = new URL(`${this._apiUrl}/v1/mods/featured`);
 
-    return await httpPost<cfv2.CF2GetFeaturedModsResponse>(url, req, {
-      headers: this.getAuthHeaders(),
-      timeout: this._httpTimeoutMs,
-    });
+    return await this.cfPost<cfv2.CF2GetFeaturedModsResponse>(url, req);
   }
 
   // https://docs.curseforge.com/#search-mods
@@ -119,10 +135,7 @@ export class CFV2Client {
 
     const url = new URL(`${this._apiUrl}/v1/mods/search?${queryParams.toString()}`);
 
-    return await httpGet<cfv2.CF2SearchModsResponse>(url, {
-      headers: this.getAuthHeaders(),
-      timeout: this._httpTimeoutMs,
-    });
+    return await this.cfGet<cfv2.CF2SearchModsResponse>(url);
   }
 
   // FINGERPRINTS
@@ -134,13 +147,24 @@ export class CFV2Client {
     const url = new URL(`${this._apiUrl}/v1/fingerprints`);
     const req: cfv2.CF2GetFingerprintMatchesRequest = { ...pRequest };
 
-    return await httpPost<cfv2.CF2GetFingerprintMatchesResponse>(url, req, {
+    return await this.cfPost<cfv2.CF2GetFingerprintMatchesResponse>(url, req);
+  }
+
+  private async cfGet<TResponse>(url: URL): Promise<HttpResult<TResponse>> {
+    return await httpGet<TResponse>(url, {
       headers: this.getAuthHeaders(),
       timeout: this._httpTimeoutMs,
     });
   }
 
-  getAuthHeaders() {
+  private async cfPost<TResponse, TBody = any>(url: URL, data?: TBody): Promise<HttpResult<TResponse>> {
+    return await httpPost<TResponse, TBody>(url, data, {
+      headers: this.getAuthHeaders(),
+      timeout: this._httpTimeoutMs,
+    });
+  }
+
+  private getAuthHeaders() {
     return {
       'x-api-key': this._apiKey,
       ...this._headers,

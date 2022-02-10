@@ -1,6 +1,8 @@
 # curseforge-v2
 
-CurseForge V2 API Library
+CurseForge V2 API library primarily typed to support usage with WoW but should work for any of their games.
+
+Source: https://docs.curseforge.com/#getting-started
 
 ## Installing
 

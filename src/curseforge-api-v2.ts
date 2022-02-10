@@ -2,14 +2,31 @@ export const BaseUrl = 'https://api.curseforge.com';
 
 export type CF2SortOrder = 'asc' | 'desc';
 
-export enum CF2GameType {
+// This is shorthand for fetching the game ids from 'getGames'
+export enum CF2GameId {
   WoW = 1,
+  TheSecretWorld = 64,
+  RunesOfMagic = 335,
+  WorldOfTanks = 423,
+  Rift = 424,
+  Minecraft = 432,
+  TheElderScrollsOnline = 455,
+  DarkestDungeon = 608,
+  StardewValley = 669,
+  Civ6 = 727,
+  KerbalSpaceProgram = 4401,
+  SecretWorldLegends = 4455,
+  SurvivingMars = 61489,
+  MinecraftDungeons = 69271,
+  ChroniclesOfArcadia = 70667,
+  Demeo = 78135,
 }
 
+// This is shorthand for fetching the game ids from 'getGameVersionTypes(1)'
 export enum CF2WowGameVersionType {
-  BurningCrusade = 73246, // WoW Burning Crusade Classic
-  Classic = 67408, // WoW Classic
   Retail = 517, // WoW
+  Classic = 67408, // WoW Classic
+  BurningCrusade = 73246, // WoW Burning Crusade Classic
 }
 
 export enum CF2ModStatus {
@@ -69,6 +86,36 @@ export enum CF2ModLoaderType {
   Cauldron = 2,
   LiteLoader = 3,
   Fabric = 4,
+}
+
+export enum CF2CoreStatus {
+  Draft = 1,
+  Test = 2,
+  PendingReview = 3,
+  Rejected = 4,
+  Approved = 5,
+  Live = 6,
+}
+
+export enum CF2CoreApiStatus {
+  Private = 1,
+  Public = 2,
+}
+
+export interface CF2GameAssets {
+  iconUrl: string;
+  tileUrl: string;
+  coverUrl: string;
+}
+
+export interface CF2Game {
+  id: number;
+  name: string;
+  slug: string;
+  dateModified: string;
+  assets: CF2GameAssets;
+  status: CF2CoreStatus;
+  apiStatus: CF2CoreApiStatus;
 }
 
 export interface CF2AddonLinks {
@@ -213,6 +260,18 @@ export interface CF2Pagination {
   totalCount: number;
 }
 
+export interface CF2GameVersionsByType {
+  type: number;
+  versions: string[];
+}
+
+export interface CF2GameVersionType {
+  id: number;
+  gameId: number;
+  name: string;
+  slug: string;
+}
+
 // REQUESTS
 export interface GetFeaturedModsRequestBody {
   gameId: number;
@@ -243,8 +302,25 @@ export interface CF2GetFingerprintMatchesRequest {
 }
 
 // RESPONSES
+export interface CF2GetGamesResponse {
+  data: CF2Game[];
+  pagination: CF2Pagination;
+}
+
+export interface CF2GetGameResponse {
+  data: CF2Game;
+}
+
 export interface CF2GetAddonResponse {
   data: CF2Addon;
+}
+
+export interface CF2GetVersionsResponse {
+  data: CF2GameVersionsByType[];
+}
+
+export interface CF2GetVersionTypesResponse {
+  data: CF2GameVersionType[];
 }
 
 export interface CF2FeaturedModsResponse {
@@ -285,5 +361,5 @@ export interface CF2GetModFileResponse {
 export interface CF2GetFeaturedModsRequest {
   gameId: number;
   excludedModIds: number[];
-  gameVersionTypeId?: CF2WowGameVersionType;
+  gameVersionTypeId?: number;
 }
