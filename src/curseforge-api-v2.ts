@@ -234,6 +234,9 @@ export interface CF2Addon {
   dateModified: string;
   dateReleased: string;
   allowModDistribution?: boolean;
+  gamePopularityRank: number;
+  isAvailable: boolean;
+  thumbsUpCount?: number;
 }
 
 export interface CF2FingerprintMatch {
