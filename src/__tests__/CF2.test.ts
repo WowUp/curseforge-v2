@@ -153,24 +153,6 @@ test('Client Get Mod Descrption Failure', async () => {
   expect(result.data).toBeFalsy();
 });
 
-test('Client Get Mod File Changelog Success', async () => {
-  const client = simpleClient();
-  const result = await client.getModFileChangelog(558086, 3570622);
-
-  expect(result.statusCode).toEqual(200);
-  expect(result.data).toBeTruthy();
-  expect(typeof result.data?.data).toEqual('string');
-});
-
-test('Client Get Mod File Changelog Failure', async () => {
-  const client = simpleClient();
-  const result = await client.getModFileChangelog(558086123, 3570622);
-
-  expect(result.statusCode).toEqual(404);
-  expect(result.message).toBeTruthy();
-  expect(result.data).toBeFalsy();
-});
-
 test('Client Get Mod Success', async () => {
   const modId = 558086;
   const client = simpleClient();
@@ -212,25 +194,6 @@ test('Client Get Mods To Be Empty', async () => {
   expect(result.data).toBeTruthy();
   expect(Array.isArray(result.data?.data)).toBeTruthy();
   expect(result.data?.data.length).toEqual(0);
-});
-
-test('Client Get Mod File Success', async () => {
-  const fileId = 3570622;
-  const client = simpleClient();
-  const result = await client.getModFile(558086, fileId);
-
-  expect(result.statusCode).toEqual(200);
-  expect(result.data).toBeTruthy();
-  expect(result.data?.data.id).toEqual(fileId);
-});
-
-test('Client Get Mod File Failure', async () => {
-  const client = simpleClient();
-  const result = await client.getModFile(558086123, 3570622);
-
-  expect(result.statusCode).toEqual(404);
-  expect(result.message).toBeTruthy();
-  expect(result.data).toBeFalsy();
 });
 
 test('Client Get Featured Mods Success', async () => {
@@ -286,6 +249,107 @@ test('Client Search Mods Failure', async () => {
   expect(result.statusCode).toEqual(404);
   expect(result.message).toBeTruthy();
   expect(Array.isArray(result.data?.data)).toEqual(false);
+});
+
+// FILES
+
+// Get Mod File
+test('Client Get Mod File Success', async () => {
+  const fileId = 3570622;
+  const client = simpleClient();
+  const result = await client.getModFile(558086, fileId);
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(result.data?.data.id).toEqual(fileId);
+});
+
+test('Client Get Mod File Failure', async () => {
+  const client = simpleClient();
+  const result = await client.getModFile(558086123, 3570622);
+
+  expect(result.statusCode).toEqual(404);
+  expect(result.message).toBeTruthy();
+  expect(result.data).toBeFalsy();
+});
+
+// Get Mod Files
+test('Client Get Mod Files Success', async () => {
+  const modId = 558086;
+  const client = simpleClient();
+  const result = await client.getModFiles({
+    modId: modId,
+  });
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(result.data?.data[0].modId).toEqual(modId);
+});
+
+test('Client Get Mod Files Failure', async () => {
+  const modId = 558086123;
+  const client = simpleClient();
+  const result = await client.getModFiles({
+    modId,
+  });
+
+  expect(result.statusCode).toEqual(404);
+  expect(result.message).toBeTruthy();
+  expect(result.data).toBeFalsy();
+});
+
+// Get Files
+test('Client Get Files Success', async () => {
+  const client = simpleClient();
+  const result = await client.getFiles({
+    fileIds: [3570622, 3570614],
+  });
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(result.data?.data.length).toEqual(2);
+});
+
+test('Client Get Files Success', async () => {
+  const client = simpleClient();
+  const result = await client.getFiles({
+    fileIds: [99999999],
+  });
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(result.data?.data.length).toEqual(0);
+});
+
+// Get Mod File Changelog
+test('Client Get Mod File Changelog Success', async () => {
+  const client = simpleClient();
+  const result = await client.getModFileChangelog(558086, 3570622);
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(typeof result.data?.data).toEqual('string');
+});
+
+test('Client Get Mod File Changelog Failure', async () => {
+  const client = simpleClient();
+  const result = await client.getModFileChangelog(558086123, 3570622);
+
+  expect(result.statusCode).toEqual(404);
+  expect(result.message).toBeTruthy();
+  expect(result.data).toBeFalsy();
+});
+
+// Get Mod File Download URL
+test('Client Get Mod File Download URL Success', async () => {
+  const client = simpleClient();
+  const result = await client.getModFileDownloadUrl(558086, 3570622);
+
+  console.log('RESULT', JSON.stringify(result));
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(typeof result.data?.data).toEqual('string');
 });
 
 test('Client Fingerprints Success', async () => {

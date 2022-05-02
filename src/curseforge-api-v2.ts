@@ -301,6 +301,19 @@ export interface CF2GetFingerprintMatchesRequest {
   fingerprints: number[];
 }
 
+export interface CF2GetModFilesRequest {
+  modId: number;
+  gameVersion?: string;
+  modLoaderType?: CF2ModLoaderType;
+  gameVersionTypeId?: number;
+  index?: number;
+  pageSize?: number;
+}
+
+export interface CF2GetModFilesRequestBody {
+  fileIds: number[];
+}
+
 // RESPONSES
 export interface CF2GetGamesResponse {
   data: CF2Game[];
@@ -358,8 +371,21 @@ export interface CF2GetModFileResponse {
   data: CF2File;
 }
 
+export interface CF2GetModFilesResponse {
+  data: CF2File[];
+  pagination: CF2Pagination;
+}
+
 export interface CF2GetFeaturedModsRequest {
   gameId: number;
   excludedModIds: number[];
   gameVersionTypeId?: number;
+}
+
+export interface CF2GetFilesResponse {
+  data: CF2File[];
+}
+
+export interface CF2GetModFileDownloadUrlResponse {
+  data: string;
 }

@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 
 import * as cfv2 from './curseforge-api-v2';
+import { CF2GetModFilesRequest } from './curseforge-api-v2';
 
 const DEFAULT_HTTP_TIMEOUT_MS = 30000;
 
@@ -75,22 +76,6 @@ export class CFV2Client {
 
   // MODS
 
-  // https://docs.curseforge.com/#get-mod-description
-  public async getModDescription(modId: number): Promise<HttpResult<cfv2.CF2GetModDescriptionResponse>> {
-    const url = new URL(`${this._apiUrl}/v1/mods/${modId}/description`);
-    return await this.cfGet<cfv2.CF2GetModDescriptionResponse>(url);
-  }
-
-  // https://docs.curseforge.com/#get-mod-file-changelog
-  public async getModFileChangelog(
-    modId: number,
-    fileId: number,
-  ): Promise<HttpResult<cfv2.CF2GetModFileChangelogResponse>> {
-    const url = new URL(`${this._apiUrl}/v1/mods/${modId}/files/${fileId}/changelog`);
-
-    return await this.cfGet<cfv2.CF2GetModFileChangelogResponse>(url);
-  }
-
   // https://docs.curseforge.com/#get-mod
   public async getMod(modId: number): Promise<HttpResult<cfv2.CF2GetAddonResponse>> {
     const url = new URL(`${this._apiUrl}/v1/mods/${modId}`);
@@ -105,10 +90,10 @@ export class CFV2Client {
     return await this.cfPost<cfv2.CF2GetModsResponse>(url, req);
   }
 
-  // https://docs.curseforge.com/#get-mod-file
-  public async getModFile(modId: number, fileId: number): Promise<HttpResult<cfv2.CF2GetModFileResponse>> {
-    const url = new URL(`${this._apiUrl}/v1/mods/${modId}/files/${fileId}`);
-    return await this.cfGet<cfv2.CF2GetModFileResponse>(url);
+  // https://docs.curseforge.com/#get-mod-description
+  public async getModDescription(modId: number): Promise<HttpResult<cfv2.CF2GetModDescriptionResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/mods/${modId}/description`);
+    return await this.cfGet<cfv2.CF2GetModDescriptionResponse>(url);
   }
 
   // https://docs.curseforge.com/#get-featured-mods
@@ -136,6 +121,50 @@ export class CFV2Client {
     const url = new URL(`${this._apiUrl}/v1/mods/search?${queryParams.toString()}`);
 
     return await this.cfGet<cfv2.CF2SearchModsResponse>(url);
+  }
+
+  // FILES
+
+  // https://docs.curseforge.com/#get-mod-file
+  public async getModFile(modId: number, fileId: number): Promise<HttpResult<cfv2.CF2GetModFileResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/mods/${modId}/files/${fileId}`);
+    return await this.cfGet<cfv2.CF2GetModFileResponse>(url);
+  }
+
+  // https://docs.curseforge.com/#get-mod-files
+  public async getModFiles(req: CF2GetModFilesRequest): Promise<HttpResult<cfv2.CF2GetModFilesResponse>> {
+    const params: any = { ...req };
+    delete params.modId;
+
+    const queryParams = new URLSearchParams(params);
+
+    const url = new URL(`${this._apiUrl}/v1/mods/${req.modId}/files?${queryParams.toString()}`);
+    return await this.cfGet<cfv2.CF2GetModFilesResponse>(url);
+  }
+
+  // https://docs.curseforge.com/#get-files
+  public async getFiles(pRequest: cfv2.CF2GetModFilesRequestBody): Promise<HttpResult<cfv2.CF2GetFilesResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/mods/files`);
+    const req: cfv2.CF2GetModFilesRequestBody = { ...pRequest };
+
+    return await this.cfPost<cfv2.CF2GetFilesResponse>(url, req);
+  }
+
+  // https://docs.curseforge.com/#get-mod-file-changelog
+  public async getModFileChangelog(
+    modId: number,
+    fileId: number,
+  ): Promise<HttpResult<cfv2.CF2GetModFileChangelogResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/mods/${modId}/files/${fileId}/changelog`);
+
+    return await this.cfGet<cfv2.CF2GetModFileChangelogResponse>(url);
+  }
+
+  // https://docs.curseforge.com/#get-mod-file-download-url
+  public async getModFileDownloadUrl(modId: number, fileId: number): Promise<HttpResult<cfv2.CF2GetModFileDownloadUrlResponse>> {
+    const url = new URL(`${this._apiUrl}/v1/mods/${modId}/files/${fileId}/download-url`);
+
+    return await this.cfGet<cfv2.CF2GetModFileDownloadUrlResponse>(url);
   }
 
   // FINGERPRINTS

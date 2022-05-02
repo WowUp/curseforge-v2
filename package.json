@@ -1,6 +1,6 @@
 {
   "name": "curseforge-v2",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "CurseForge V2 API Library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
