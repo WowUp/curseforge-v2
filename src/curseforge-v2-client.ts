@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig, Method } from 'axios';
 
 import * as cfv2 from './curseforge-api-v2';
-import { CF2GetModFilesRequest } from './curseforge-api-v2';
 
 const DEFAULT_HTTP_TIMEOUT_MS = 30000;
 
@@ -132,7 +131,7 @@ export class CFV2Client {
   }
 
   // https://docs.curseforge.com/#get-mod-files
-  public async getModFiles(req: CF2GetModFilesRequest): Promise<HttpResult<cfv2.CF2GetModFilesResponse>> {
+  public async getModFiles(req: cfv2.CF2GetModFilesRequest): Promise<HttpResult<cfv2.CF2GetModFilesResponse>> {
     const params: any = { ...req };
     delete params.modId;
 
