@@ -238,7 +238,7 @@ test('Client Search Mods Success', async () => {
   expect(result.data?.data.length).toBeGreaterThan(1);
 });
 
-test('Client Search Mods Failure', async () => {
+test('Client Search Mods Empty', async () => {
   const client = simpleClient();
   const result = await client.searchMods({
     gameId: 1122,
@@ -246,9 +246,10 @@ test('Client Search Mods Failure', async () => {
     searchFilter: 'DBM',
   });
 
-  expect(result.statusCode).toEqual(404);
+  expect(result.statusCode).toEqual(200);
   expect(result.message).toBeTruthy();
-  expect(Array.isArray(result.data?.data)).toEqual(false);
+  expect(Array.isArray(result.data?.data)).toEqual(true);
+  expect(result.data?.data?.length).toEqual(0);
 });
 
 // FILES
