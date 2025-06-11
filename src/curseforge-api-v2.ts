@@ -29,6 +29,7 @@ export enum CF2WowGameVersionType {
   BurningCrusade = 73246, // WoW Burning Crusade Classic
   WOTLK = 73713, // WoW Wrath of the Lich King Classic
   Cata = 77522, // WoW Cataclysm Classic
+  Mists = 79434, // WoW Mists of Pandaria Classic
 }
 
 export enum CF2ModStatus {

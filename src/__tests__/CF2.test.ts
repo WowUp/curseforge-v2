@@ -311,15 +311,24 @@ test('Client Get Files Success', async () => {
   expect(result.data?.data.length).toEqual(2);
 });
 
-test('Client Get Files Success', async () => {
+test('Client Get Invalid Files Success', async () => {
+  const client = simpleClient();
+  const result = await client.getFiles({
+    fileIds: [99999999, 3570622],
+  });
+
+  expect(result.statusCode).toEqual(200);
+  expect(result.data).toBeTruthy();
+  expect(result.data?.data.length).toEqual(1);
+});
+
+test('Client Get Invalid Files Fails', async () => {
   const client = simpleClient();
   const result = await client.getFiles({
     fileIds: [99999999],
   });
 
-  expect(result.statusCode).toEqual(200);
-  expect(result.data).toBeTruthy();
-  expect(result.data?.data.length).toEqual(0);
+  expect(result.statusCode).toEqual(404);
 });
 
 // Get Mod File Changelog
