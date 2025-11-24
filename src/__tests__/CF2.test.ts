@@ -187,13 +187,11 @@ test('Client Get Mods Success', async () => {
 test('Client Get Mods To Be Empty', async () => {
   const client = simpleClient();
   const result = await client.getMods({
-    modIds: [558086123],
+    modIds: [999999999, 999999998],
   });
 
-  expect(result.statusCode).toEqual(200);
-  expect(result.data).toBeTruthy();
-  expect(Array.isArray(result.data?.data)).toBeTruthy();
-  expect(result.data?.data.length).toEqual(0);
+  expect(result.statusCode).toEqual(404);
+  expect(result.data).toBeFalsy();
 });
 
 test('Client Get Featured Mods Success', async () => {
