@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { expect, jest, test } from '@jest/globals';
 import { CF2WowGameVersionType } from '../curseforge-api-v2';
 import { CFV2Client } from '../index';
 
@@ -375,7 +376,7 @@ test('Client Fingerprints Success', async () => {
 test('Client Fingerprints Failure', async () => {
   const client = simpleClient();
   const result = await client.getFingerprintMatches({
-    fingerprints: [292693004122],
+    fingerprints: [1234567890],
   });
 
   expect(result.statusCode).toEqual(200);
