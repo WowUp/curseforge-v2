@@ -108,7 +108,8 @@ export class CFV2Client {
   public async searchMods(params: cfv2.CF2SearchModsParams): Promise<HttpResult<cfv2.CF2SearchModsResponse>> {
     const queryMap: Record<string, string> = {};
 
-    for (const [key, value] of Object.entries(params)) {
+    for (const key of Object.keys(params)) {
+      const value = (params as any)[key];
       if ((typeof value !== 'string' && isNaN(value)) || value === null || value === undefined) {
         continue;
       }

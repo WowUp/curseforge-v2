@@ -30,7 +30,8 @@ export enum CF2WowGameVersionType {
   WOTLK = 73713, // WoW Wrath of the Lich King Classic
   Cata = 77522, // WoW Cataclysm Classic
   Mists = 79434, // WoW Mists of Pandaria Classic
-  WrathTitanReforged = 81212 // WoW Wrath of the Lich King Titan Reforged
+  WrathTitanReforged = 81212, // WoW Wrath of the Lich King Titan Reforged
+  Forever = 88568, // WoW Forever Classic
 }
 
 export enum CF2ModStatus {
